@@ -1,0 +1,32 @@
+'This script is not necessary if following parameters were supplied for keywords under Database extension
+'FVSCUTLIST 1 2
+'FVSTREELIST 1 2
+'FVSATRTLIST 1 2
+'Create link to FVS_WesternTreeSpececiesTranslator table.
+'It is possible the the link is already there.
+Public Sub FixFiaCodes()
+    Dim db As DAO.Database
+    Dim td As DAO.TableDef
+    Dim strSQL As String
+    
+    Set db = CurrentDb
+    On Error Resume Next
+    DoCmd.SetWarnings False
+    
+    strSQL = "Update FVS_WesternTreeSpeciesTranslator Inner Join  FVS_TREELIST On FVS_WesternTreeSpeciesTranslator.USDA_PLANTS_SYMBOL=FVS_Treelist.Species " + _
+    "Set FVS_TreeList.Species = FVS_WesternTreeSpeciesTranslator.FIA_SPCD"
+    'Update FVS_TreeList
+    DoCmd.RunSQL (strSQL)
+    
+    strSQL = "Update FVS_WesternTreeSpeciesTranslator Inner Join  FVS_CUTLIST On FVS_WesternTreeSpeciesTranslator.USDA_PLANTS_SYMBOL=FVS_Cutlist.Species " + _
+    "Set FVS_CutList.Species = FVS_WesternTreeSpeciesTranslator.FIA_SPCD"
+    'Update FVS_TreeList
+    DoCmd.RunSQL (strSQL)
+    
+    strSQL = "Update FVS_WesternTreeSpeciesTranslator Inner Join  FVS_ATRTList On FVS_WesternTreeSpeciesTranslator.USDA_PLANTS_SYMBOL=FVS_ATRTList.Species " + _
+    "Set FVS_ATRTList.Species = FVS_WesternTreeSpeciesTranslator.FIA_SPCD"
+    DoCmd.RunSQL (strSQL)
+    MsgBox("Process Completed")
+        
+
+End Sub

@@ -1,0 +1,265 @@
+<!-- AUTHOR- Ben Sharma,Tel -510 3164926,Email -benktesh1@gmail.com -->
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="ISO-8859-1">
+		<title>Exercise 1</title>	
+		<link rel="stylesheet" type="text/css" href="style/style.css">
+		<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+	 			populateTable(contactList)
+				/**
+				 * This functions sorts the data by the column
+				 * The css class is also reset to display proper
+				 * Arrows on the table head.
+				**/
+				$("#tableHeader th").click(function(){
+					var dataProperty = $(this).attr("dataProperty");
+					var currentSort = $(this).hasClass("sort-desc") ? "desc" : $(this).hasClass("sort-asc")? "asc" : "none";
+					if(currentSort == "desc"){
+						contactList.sort(genericComparator(dataProperty,"asc"));
+						$(this).siblings().attr("class","sort-none");
+						$(this).attr("sort-dssc");
+					}
+					else{
+						contactList.sort(genericComparator(dataProperty,"desc"));
+						$(this).siblings().attr("class", "sort-none");
+						$(this).attr("class","sort-desc");
+					}
+					populateTable(contactList);		
+				});
+	
+	
+				//This function will remove selected rows when delete button is clicked.
+				$( "#btnDelete" ).click(function(){		  
+				 	$(function($) {
+				    	var row = $('.highlight');
+				   		row.remove();
+					});
+				});
+				
+				//This function reses the rows to original state  when reset button is clicked.
+				$( "#btnReset" ).click(function(){		  
+				 	$(document).click(function() {
+				 	    location.reload();
+				 	});
+				});
+				
+				
+				//This function will highlight the selected row to preapre for editing the 
+				//content in the cell.
+				//I disabled it for now:
+				/*
+				$( "#contactList tr" ).dblclick(function() {
+					$('#contactList').find('tr').find('td').attr('contentEditable',false);
+					$('#contactList').find('tr').removeClass('highlight');	
+					$('#contactList').find('tr').removeClass('highlightEdit');		
+						$(this).toggleClass("highlightEdit");
+						var row = $('.highlightEdit');
+						row.find('td').attr('contentEditable',true);		
+				});
+				*/
+				// This function populates the rows from data.
+				function populateTable(contactList)	{
+					$("#contactList").find("tr").remove();
+					$.each(contactList, function (i, item) {
+						var firstName = checkUndefined(item["firstName"]);
+				 		var lastName = checkUndefined(item["lastName"]);
+				 		var address = checkUndefined(item["address"]) + checkUndefined(item["city_state_zip"]) ;
+				 		var telephone = checkUndefined(item["telephone"]);
+				 		var row = makeRow(firstName, lastName, address, telephone);
+				 		$("#contactList").append(row);  
+					});
+					attachEditableClass()
+				}
+			});
+			
+			//This function highlights the selected rows and prepare for deletion
+			//The selections can be toggled. Multiple rows can be selected. Only 
+			//Rows from contactlist tables are made selectable
+			function attachEditableClass(){
+				$('#contactList tr').click(function() {
+					$(this).find('td').attr('contentEditable',false);
+					$(this).toggleClass("highlight");
+				});
+			}
+		//Data
+		contactList = 
+			[
+				{
+					'lastName':	'Abraham',
+					'firstName': 'Mike',
+					'address' :	'2 Newtown Way Austin, TX 78702',
+					'telephone': '(512) 522-1234',
+				},
+				{
+					'lastName': 'Adams', 
+					'firstName' : 'John', 
+					'address' : '1 Newtown Way Austin, TX 78701',
+					'telephone' : '(512) 781-9595'
+				}, 
+				{
+					'lastName': 'Brown',
+					'firstName':  'Mike', 
+					'address' :	'2323 Circle Ave. Houston, TX 75101',		
+					'telephone'  :	'713-445-1112'		
+				}, 
+				{
+					'lastName': 'Broom', 
+					'firstName': 'David', 		
+					'address' :	'3434 Square St. Austin, Tx 78701',		
+					'telephone' : '512.223.9989'		
+				}, 
+				
+				{
+					'lastName':	'Cloom', 
+					'firstName':  'Mary',		
+					'telephone'  : '512-776-2323 (office) 512-877-2312 (mobile)',		
+					'address' :	'12 S. Triangle Way Austin, TX  78703'		
+				}, 
+				{
+					'lastName': 'Davison', 
+					'firstName':'Mark Anthony',		
+					'telephone'  :	'512.223.5554  or 512.233.4445',		
+					'address' :	'34 South 2nd Blvd. Austin, TX 78781'		
+				}, 
+				{
+					'lastName': 'Moor', 
+					'firstName':'Chuck',		
+					'address' :'	5 W. Philly  Philadelphia, PA 19075',		
+					'telephone'  :	'610-444-3332'		
+				}, 
+				{	
+					'lastName': 'Moor',
+					'firstName': 'Charles',		
+					'address' :	'5 W. Philly Philadelphia, PA 19075',		
+					'telephone'  :	'610-444-3333'		
+				}, 
+				{
+					'lastName': 'Moor',
+					'firstName' : 'Charles',		
+					'address' :	'4212 East 6th St. Austin, Tx 78761',		
+				}, 
+				{
+					'lastName':'Opel', 
+					'firstName':'Wayne',		
+					'address' :	'1234 S. Old St. Austin, TX 78701',		
+					'telephone'  :	'Work – 512-345-1234',		
+					'fax' : '512-345-1235'		
+				}, 
+				{
+					'lastName': 'Peterson', 
+					'firstName': 'Mark S.',		
+					'telephone'  :	'(512) 451-1212',		
+				}, 
+				{
+					'lastName':	'Amy', 
+					'firstName': 'Marcy',		
+					'address' :	'Four S. 15th, Suite 2001 Austin, TX 78711',		
+					'telephone'  :	'512.454.1234 ext. 5'		
+				}, 
+				{
+					'lastName': 'Blue', 
+					'firstName': 'Star',		
+					'address' :	'12 Route 70 E.',		
+					'city_state_zip' :	'Temple, TX 79123',		
+					'telephone'  :	'Direct: 512-123-1234 Mobile: 512-123-5433'		
+				}, 
+				{
+					'lastName': 'Car', 
+					'firstName': 'Fancy',		
+					'address' :	'1 Dealer Lane and 2 Used St. N. Austin, TX 78799',		
+					'telephone'  :	'512.123.6788 or 512.123.0900'		
+				}, 
+				{
+					'lastName': 'Car', 
+					'firstName': 'Plain',		
+					'address' :	'1 Chevy Place Mobile, AL 23454',		
+					'telephone'  :	'908-789-6666'
+				}	
+			];
+			//Function to write object content  to console
+			function writeObjToConsole (item) 
+			{
+				$.each(item, function (key, value) {
+					console.log(key+" : " + value);
+			
+			});
+			}
+			//Function to write array of object content  to console
+			function writeObjArrayToConsole (objarray) 
+			{
+				$.each(objarray, function (i, item) {
+					$.each(item, function (key, value) {
+						console.log(key+" : " + value);
+					});
+				});
+			}
+			
+			/*
+			 * Function checks a variable and return '-' for undefined variable
+			 */
+			function checkUndefined (x)
+			{
+				return (null==x? '-':x);
+			}
+			
+			/*
+			 * Function to  make row at  runtime
+			 */
+			function makeRow(firstName, lastName, address, phoneNumber) {
+			    var tr = '<tr>' ;
+			            tr += '<td id="fname">' + firstName  + '</td>';
+			            tr += '<td id="lname">' + lastName + '</td>';
+			            tr += '<td id="address">' + address + '</td>';  
+			            tr += '<td id="telephone">' + phoneNumber + '</td>';  
+			    tr +='</tr>';
+			    return tr;
+			}
+		/*
+		 * Generic comparator function to sort Objects
+		 */
+		function genericComparator(property,direction) {
+			return function(a,b){
+				var val1 = a[property] && a[property].toLowerCase();
+				var val2 = b[property] && b[property].toLowerCase(); 
+			  	var retVal =  ((val1 > val2) ? 1 : ((val1 < val2) ? -1 : 0));
+			  	if("desc" == direction ){
+			  		retVal *= -1;
+			  	}
+			  	return retVal;
+			};
+		}
+	</script>
+
+	</head>
+	<body>
+		<div class="fixedHeaderScroll">
+			<table id = "tableHeader">
+				<thead>
+					<tr>
+						<th dataProperty="firstName"  id="fname">First Name</th>
+						<th dataProperty="lastName"  id="lname">Last Name</th>
+						<th dataProperty="address"  id="address">Address</th>
+						<th dataProperty="telephone" id=telephone">Phone Number</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+
+		<div class="scroll" >
+  			<table id="contactList">	
+			</table>
+		</div>
+	<br/>		
+		<!-- Double clicking the row will make the row editable. <br/>  -->
+		Single click on a row prepares row for deletion.<br/>
+		Reset Button brings the UI to the original state.<br/>
+		Delete button deletes all the rows highlighted in yellow achieved by 'single click'.<br/>
+		<!-- Save Button saves the state (data - deleted rows, or edited values).<br/>  -->
+		<input type="button" id="btnReset" value='Reset'/>
+		<input type="button" id="btnDelete" value='Delete'/>
+		<input type="button" id="btnSave" value='Save'/>
+	</body>
+</html>
